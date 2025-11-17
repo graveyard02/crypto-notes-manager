@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Secure Notes</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f6f9fc;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #4a90e2;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    header a:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #4a90e2;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #357abd;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background: #f3f7ff;
+      border: 1px solid #e0e7ff;
+      margin-bottom: 12px;
+      padding: 12px 15px;
+      border-radius: 8px;
+    }
+
+    li strong {
+      color: #333;
+      font-size: 16px;
+    }
+
+    li p {
+      color: #555;
+      margin: 5px 0 0 0;
+      font-size: 14px;
+    }
+
+    .no-notes {
+      text-align: center;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Secure Notes</h1>
+    <a href="/logout">Logout</a>
+  </header>
+
+  <div class="container">
+    <h2>Add a New Note</h2>
+    <form action="/notes/add" method="POST">
+      <!-- ✅ CSRF Token -->
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <input type="text" name="title" placeholder="Enter note title..." required />
+      <textarea name="content" placeholder="Write your note here..." required></textarea>
+      <button type="submit">Save Note</button>
+    </form>
+
+    <h2>All Notes</h2>
+    <% if (notes.length === 0) { %>
+      <p class="no-notes">No notes yet. Start by adding one above!</p>
+    <% } else { %>
+      <ul>
+        <% notes.forEach(note => { %>
+          <li>
+            <strong><%= note.title %></strong>
+            <p><%= note.content %></p>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+  <script>
+  // Auto logout after 5 minutes (inactivity)
+  const LOGOUT_TIME = 5 * 60 * 1000; // 5 minutes
+  let logoutTimer;
+
+  function resetLogoutTimer() {
+    clearTimeout(logoutTimer);
+    logoutTimer = setTimeout(() => {
+      alert("You have been logged out due to 5 minutes of inactivity.");
+      window.location.href = "/logout"; // Redirect to logout route
+    }, LOGOUT_TIME);
+  }
+
+  // Reset timer on activity
+  window.onload = resetLogoutTimer;
+  document.onmousemove = resetLogoutTimer;
+  document.onkeypress = resetLogoutTimer;
+  document.onscroll = resetLogoutTimer;
+  document.onclick = resetLogoutTimer;
+</script>
+
+</body>
+</html>

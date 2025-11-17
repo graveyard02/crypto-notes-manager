@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; margin: 30px; background: #f6f8fa; }
+h1 { color: #222; }
+form { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+input, textarea { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 6px; }
+button { background: #2563eb; color: white; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; }
+.note { background: #fff; padding: 10px; border-radius: 8px; margin: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
